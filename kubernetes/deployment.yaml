@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: celloscope
+  name: celloscope-deployment
+  labels:
+    app: celloscope 
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate 
+  selector:
+    matchLabels:
+      app: celloscope 
+  template:
+    metadata:
+      labels:
+        app: celloscope
+    spec:
+      containers:
+      - name: celloscope
+        image: gitlab.spang-lab.de:4687/containers/scrna-seq-shiny:0.4.3
+        ports:
+        - containerPort: 3838 
+          name: http
+        volumeMounts:
+        - name: data 
+          mountPath: /usr/local/r-job/data/shinyUseableData
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+      imagePullSecrets:
+      - name: regcred
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: celloscope-pvc

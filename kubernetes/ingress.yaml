@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: celloscope-ingress
+  namespace: celloscope 
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/proxy-body-size: 2G
+spec:
+  rules:
+  - host: celloscope.spang-lab.de
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: celloscope
+            port:
+              number: 80
+  tls:
+  - hosts:
+      - celloscope.spang-lab.de
+    secretName: celloscope-spang-lab-tls
