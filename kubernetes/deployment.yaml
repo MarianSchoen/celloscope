@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: celloscope
-        image: gitlab.spang-lab.de:4687/containers/scrna-seq-shiny:0.4.3
+        image: gitlab.spang-lab.de:4687/containers/celloscope:0.2.14
         ports:
         - containerPort: 3838 
           name: http
